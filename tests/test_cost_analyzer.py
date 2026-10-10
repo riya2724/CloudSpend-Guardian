@@ -30,6 +30,18 @@ class TestCostAnalyzer(unittest.TestCase):
             output.getvalue()
         )
 
+    def test_negative_cost_is_rejected(self):
+        services = {"EC2": -10.00}
+
+        with self.assertRaises(ValueError):
+            analyze_costs(services, 5000.00)
+
+    def test_text_cost_is_rejected(self):
+        services = {"EC2": "invalid"}
+
+        with self.assertRaises(ValueError):
+            analyze_costs(services, 5000.00)
+
 
 if __name__ == "__main__":
     unittest.main()

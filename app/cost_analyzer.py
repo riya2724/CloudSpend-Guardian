@@ -1,8 +1,18 @@
+def validate_costs(services):
+    for service, cost in services.items():
+        if not isinstance(cost, (int, float)):
+            raise ValueError(f"Invalid cost for {service}: cost must be a number")
+
+        if cost < 0:
+            raise ValueError(f"Invalid cost for {service}: cost cannot be negative")
+
 
 USD_TO_INR = 85.0
 
 
 def analyze_costs(services_usd, budget_inr):
+    validate_costs(services_usd)
+    
     services_inr = {
         service: cost * USD_TO_INR
         for service, cost in services_usd.items()
