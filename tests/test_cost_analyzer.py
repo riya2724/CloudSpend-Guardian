@@ -19,7 +19,6 @@ class TestCostAnalyzer(unittest.TestCase):
     def test_budget_exceeded_alert(self):
         services = {"EC2": 100.00}
         budget = 5000.00
-
         output = StringIO()
 
         with redirect_stdout(output):
@@ -41,6 +40,19 @@ class TestCostAnalyzer(unittest.TestCase):
 
         with self.assertRaises(ValueError):
             analyze_costs(services, 5000.00)
+
+    def test_budget_warning_at_80_percent(self):
+        services = {"EC2": 80.00}
+        budget = 8500.00
+        output = StringIO()
+
+        with redirect_stdout(output):
+            analyze_costs(services, budget)
+
+        self.assertIn(
+            "WARNING: You have used at least 80% of your budget.",
+            output.getvalue()
+        )
 
 
 if __name__ == "__main__":
